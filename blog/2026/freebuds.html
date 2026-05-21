@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How I've got Huawei FreeBuds Pro 5 Firmware</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/fontawesome-free-7.2.0-web/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar"><div class="logo">AR.</div><ul class="nav-links"><li><a href="/index.html">Back to Home</a></li></ul></nav>
+    <main style="padding-top: 100px; max-width: 800px; margin: 0 auto; min-height: 80vh; padding-bottom: 50px;">
+        <article class="section" style="padding-top: 2rem;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent);">How I've got Huawei FreeBuds Pro 5 Firmware</h1>
+            <span class="blog-date" style="margin-bottom: 2rem; display: block; color: var(--text-muted); font-family: var(--font-mono);">May 21, 2026</span>
+
+            <img src="images/fbp5.jpg" alt="Huawei FreeBuds Pro 5" style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 2rem; border: 1px solid var(--border);">
+
+            <p>I recently graduated and my wonderful friends gifted me a pair of new earbuds <strong>Huawei FreeBuds Pro 5</strong>. As a technical enthusiast, I decided I want to look at the firmware they implemented. Since manufacturers don't exactly post these binary files on their homepage, I knew I had to extract it directly from the update process triggered by the companion app.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">The MITM attack</h3>
+            <p>My first thought was to perform a simple Man-In-The-Middle (MITM) attack. I fired up <code>mitmproxy</code> on my computer and routed my Android phone's network traffic through it. The goal was to sniff the exact URL the Huawei Audio Connect app uses to download the firmware.</p>
+            <p>However, upon opening the app, the update request completely failed. The app was performing certificate validation, realizing my mitmproxy certificate wasn't the official Huawei one, and aggressively dropping the connection.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">Digging into the APK</h3>
+            <p>To bypass this, I needed to modify the app to trust my proxy. I grabbed the Huawei Audio Connect 2.0.3.350 APK and decompiled it using <code>apktool</code>.</p>
+            <p>Poking around the extracted files, I managed to find the root CA certificate the application used. I immediately swapped it out with my own mitmproxy CA certificate, recompiled the app, signed it and installed it on my device.</p>
+            <p>I confidently opened the app... and the connection <strong>still</strong> failed. I knew I had to dive deeper.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">Jadx-GUI</h3>
+            <p>I returned to the APK file, this time I used <code>Jadx-GUI</code> to analyze the Java source code directly. After tracing the network request lifecycle, I discovered the culprit: a <strong>double check</strong> hardcoded into the application logic.</p>
+            <p>Even if the root certificate matched the one in the assets folder, the app explicitly verified that the certificate's owner name strictly contained the string <code>"Huawei"</code>. Since my mitmproxy certificate was issued by "mitmproxy", it was triggering a security exception.</p>
+            
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">Patching Smali</h3>
+            <p>Armed with this knowledge, I went back to my <code>apktool</code> output. I located the corresponding Smali file handling the SSL validation and surgically removed the conditional jump that enforced the "Huawei" name check.</p>
+            <p>I recompiled the APK one last time, installed it, and crossed my fingers.<br>
+            <strong style="margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: bold; color: darkgreen;">The app connected to the server!</strong>
+            <p>Having this system appropriately set up, I triggered the firmware update check. A JSON payload containing device info was sent to the server and, right after it, the server replied with the download URL for the earbuds.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">Time to analyze!</h3>
+            <p>Since the payload was a zip archive, I started extracting the content: it was composed by some metadata plus the firmware binary file itself.</p>
+            <p>Extracting the firmware package using <code>binwalk --carve</code>, four files were extracted, I've run the commands <code>file</code> and <code>du -sh</code> to analyze them and this is the output.</p>
+
+            <img src="images/binwalk.png" alt="Files list" style="width: 100%; border-radius: 8px; margin-bottom: 2rem; border: 1px solid var(--border);">
+
+            <p>From this perspective, the outstanding files are the first two and the last one: the <code>strings</code> command on <code>updatepkg.bin_0_unknown.raw</code> confirms its unencrypted nature, most of the output words are in plain English language. Trying to reverse-engineering it with Ghidra and setting the CPU variant to ARMv8T (32 bit, little endian), some functions pop out, so apparently the buds work on ARM cpu!
+
+            <p>The file <code>updatepkg.bin_119238_sha256.raw</code> appears to be the only one with a recognized type: OpenPGP Public Key, but unfortunately I could import it using standard <code>gpg --import</code>.
+
+            <p>The last file, <code>updatepkg.bin_120150_unknown.raw</code>, seems to be the firmware itself, almost entirely encrypted of course!</p>
+            <img src="images/updatepkg.bin_120150_unknown.raw.png" alt="Files list" style="width: 100%; border-radius: 8px; margin-bottom: 2rem; border: 1px solid var(--border);">
+
+            <div style="background: var(--card-bg); padding: 1.5rem; border-left: 4px solid var(--accent); border-radius: 4px; margin-top: 3rem;">
+                <h4 style="margin-bottom: 0.5rem; color: var(--text-main); font-weight: 600; font-family: var(--font-main);"><i class="fas fa-hourglass-half" style="color: var(--accent); margin-right: 0.5rem;"></i> To be continued...</h4>
+                <p style="margin-bottom: 0;">The next phase of this project involves reverse-engineering the decryption mechanism to analyze the main payload.</p>
+            </div>
+        </article>
+    </main>
+    <footer>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 2rem;">&copy; <span id="year"></span> Alberto Robazza. All rights reserved.</p>
+        <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alberto Robazza - AI Researcher & Engineer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">AR.</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#blog" class="highlight-link">Blog</a></li>
+        </ul>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>Alberto Robazza</h1>
+            <h2>A.I. Researcher & Cybersecurity Hobbyist</h2>
+            <p class="tagline">Fine-tuning models, AI models on consumer hardware, and penetration testing</p>
+            <div class="contact-info">
+                <a href="mailto:robazza.alberto@proton.me"><i class="fas fa-envelope"></i> robazza.alberto@proton.me</a>
+                <a href="https://linkedin.com/in/alberto-robazza/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <span><i class="fas fa-map-marker-alt"></i> Treviso, Italy</span>
+            </div>
+        </div>
+        <div class="scroll-down">
+            <a href="#about"><i class="fas fa-chevron-down"></i></a>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="section">
+            <h2 class="section-title">Highlights</h2>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <i class="fas fa-server fa-3x"></i>
+                    <h3>A.I. Researcher</h3>
+                    <p>Owned end-to-end model selection and deployment for a production-ready software.</p>
+                </div>
+                <div class="highlight-card">
+                    <i class="fas fa-microscope fa-3x"></i>
+                    <h3>Cybersecurity Hobbyist</h3>
+                    <p>Successfully exploited vulnerabilities in consumer hardware</p>
+                </div>
+                <div class="highlight-card">
+                    <i class="fas fa-users fa-3x"></i>
+                    <h3>Team-Oriented</h3>
+                    <p>Collaborated on winning data science competition through novel encoding approach.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="section bg-alt">
+            <h2 class="section-title">Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Sep 2025 - Mar 2026</div>
+                    <div class="timeline-content">
+                        <h3>A.I. Researcher Engineer</h3>
+                        <h4>University of Valencia – Valencia, Spain</h4>
+                        <p>Developed a production-ready software impacting a company in the educational sector, actively participating in a team.</p>
+                        <ul>
+                            <li>Owned end-to-end model selection: evaluated 4 models, selected solution achieves 5s inference.</li>
+                            <li>Delivered 90% accuracy on VLM writing style via prompt engineering.</li>
+                            <li>Selected speech-to-text model achieving 88.5% accuracy on-device, matching cloud services while preserving user privacy.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="section">
+            <h2 class="section-title">Education</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Oct 2023 – Apr 2026</div>
+                    <div class="timeline-content">
+                        <h3>Master of AI & Cybersecurity</h3>
+                        <h4>University of Udine & University of Klagenfurt (Udine, Italy & Klagenfurt, Austria)</h4>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Aug 2024 – Dec 2024</div>
+                    <div class="timeline-content">
+                        <h3>International Experience</h3>
+                        <h4>Southern Cross University (Gold Coast, Australia)</h4>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Oct 2020 – Oct 2023</div>
+                    <div class="timeline-content">
+                        <h3>Bachelor of IoT, Big Data, Machine Learning</h3>
+                        <h4>University of Udine (Udine, Italy)</h4>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Jan 2023 – Jun 2023</div>
+                    <div class="timeline-content">
+                        <h3>International Experience</h3>
+                        <h4>Norwegian University of Science and Technology (Trondheim, Norway)</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="section bg-alt blog-section">
+            <h2 class="section-title">Technical Blog</h2>
+            <p class="blog-intro">Deep dives into my past projects, algorithms, and technical challenges.</p>
+            
+            <h3 style="margin-top: 3rem; margin-bottom: 1.5rem; color: var(--accent);">AI & Machine Learning</h3>
+            <div class="blog-grid">
+                <article class="blog-post">
+                    <div class="blog-post-content">
+                        <span class="blog-date">August 12, 2023</span>
+                        <h3>Fine-Tuning Flan-T5: Cutting Training Time in Half</h3>
+                        <p>For my Bachelor's thesis, I tackled automatic ad description generation. Scraping over 9,000 listings yielded a rich dataset of 44 features. The challenge wasn't just accuracy—it was efficiency. By leveraging correlation feature selection, I managed to reduce training epochs from 10 to 5 for Flan-T5. This 50% drop in compute costs maintained a solid 0.16 ROUGE accuracy, proving that smarter data engineering can easily rival throwing more compute at the problem.</p>
+                        <!-- <a href="blog/blog-flan-t5.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a> -->
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <div class="blog-post-content">
+                        <span class="blog-date">November 22, 2022</span>
+                        <h3>Winning Strategies: Statistical Encoding for Categorical Data</h3>
+                        <p>In a recent university group competition to predict income tiers, traditional one-hot or label encoding wasn't cutting it due to high cardinality and implicit bias. Our team engineered a novel statistical encoding approach based on demographic distributions. This reduced feature dimensionality while preserving nuanced relationships, ultimately leading to the highest prediction score in the entire class.</p>
+                        <!--<a href="blog/blog-statistical-encoding.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>-->
+                    </div>
+                </article>
+            </div>
+
+            <h3 style="margin-top: 3rem; margin-bottom: 1.5rem; color: var(--accent);">Reverse Engineering</h3>
+            <div class="blog-grid">
+                <article class="blog-post">
+                    <div class="blog-post-content">
+                        <span class="blog-date">April 15, 2025</span>
+                        <h3>Extracting Huawei FreeBuds Pro 5 Firmware</h3>
+                        <p>Reverse engineering of Huawei Audio Connect Android app to intercept the FreeBuds Pro 5 OTA update flow and firmware package saved. Certificate validation bypassed patching the app, and firmware analysis.</p>
+                        <a href="blog/2026/freebuds.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-post">
+                    <div class="blog-post-content">
+                        <span class="blog-date">March 05, 2025</span>
+                        <h3>Android Reverse Engineering: Bypassing App Certificates</h3>
+                        <p>Penetration testing on Askey Fastgate router, bypassed filtered SSH, restricted shell escaping, command injection flaw to an interactive Linux session. The project showcases hands-on embedded security research and methodical problem solving.</p>
+                        <a href="blog/2026/askey.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                
+                
+            </div>
+        </section>
+
+        <section id="skills" class="section bg-alt">
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>ML/AI Systems</h3>
+                    <div class="skill-tags">
+                        <span>PyTorch</span> <span>HuggingFace Transformers</span> <span>llama.cpp</span> <span>ONNX</span> <span>Prompt Engineering</span> <span>Model Evaluation</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Data Engineering</h3>
+                    <div class="skill-tags">
+                        <span>pandas</span> <span>NumPy</span> <span>Web Scraping</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Programming</h3>
+                    <div class="skill-tags">
+                        <span>Python</span> <span>C</span> <span>C++</span> <span>Bash</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year"></span> Alberto Robazza. All rights reserved.</p>
+        <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

