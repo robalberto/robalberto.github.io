@@ -778,8 +778,8 @@ footer {
 
 /* Blog Detail Pages */
 .blog-detail {
-    padding: 12rem 10% 4rem;
-    max-width: 800px;
+    padding: 12rem 0 4rem;
+    max-width: 960px;
     margin: 0 auto;
 }
 
@@ -1045,7 +1045,7 @@ footer {
     }
 
     .blog-detail {
-        padding: 10rem 5% 3rem;
+        padding: 10rem 0 3rem;
     }
 
     .blog-title {
