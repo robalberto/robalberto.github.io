@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-13T12:55:00Z",
+  "title": "Design System: Alberto Robazza Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "bg-deep": { "role": "neutral", "displayName": "Deep Navy", "canonical": "#0b0f19", "tonalRamp": ["#0b0f19", "#131a2a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1"] },
+      "bg-alt": { "role": "neutral", "displayName": "Tonal Navy", "canonical": "#131a2a", "tonalRamp": ["#0b0f19", "#131a2a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1"] },
+      "text-main": { "role": "neutral", "displayName": "Off-White", "canonical": "#f8fafc", "tonalRamp": ["#0b0f19", "#1e293b", "#334155", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0", "#f8fafc"] },
+      "text-muted": { "role": "neutral", "displayName": "Muted Gray", "canonical": "#94a3b8", "tonalRamp": ["#0b0f19", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0"] },
+      "accent": { "role": "primary", "displayName": "Electric Ice", "canonical": "#38bdf8", "tonalRamp": ["#0c4a6e", "#075985", "#0369a1", "#0284c7", "#0ea5e9", "#38bdf8", "#7dd3fc", "#bae6fd"] },
+      "border": { "role": "neutral", "displayName": "Border Gray", "canonical": "#1e293b", "tonalRamp": ["#0b0f19", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero h1. The name. Capped at 6rem." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles. Includes left accent bar." },
+      "body": { "displayName": "Body", "purpose": "Paragraphs. Max-width 70ch." },
+      "mono": { "displayName": "Mono", "purpose": "Metadata: dates, tags, keyboard shortcuts." },
+      "label": { "displayName": "Label", "purpose": "Small uppercase labels. Monospace family." }
+    },
+    "shadows": [
+      { "name": "card-hover", "value": "0 5px 20px rgba(0,0,0,0.3)", "purpose": "Blog post cards on hover. Subtle, ambient." },
+      { "name": "accent-glow", "value": "0 0 10px rgba(56, 189, 248, 0.3)", "purpose": "Timeline dots, focus rings. Accent-tinted." },
+      { "name": "scrim", "value": "rgba(11, 15, 25, 0.9) + blur(10px)", "purpose": "Keyboard help overlay backdrop. Blurs page behind." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default easing for state transitions." },
+      { "name": "scroll-hint", "value": "2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite", "purpose": "Scroll-down chevron fade-and-slide." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Link",
+      "kind": "custom",
+      "refersTo": "link-primary",
+      "description": "Inline link with accent color and hover transition.",
+      "html": "<a href=\"#\" class=\"ds-link-primary\">Link text</a>",
+      "css": ".ds-link-primary { color: #38bdf8; text-decoration: none; transition: color 0.3s ease; } .ds-link-primary:hover { color: #7dd3fc; }"
+    },
+    {
+      "name": "Mono Terminal Link",
+      "kind": "custom",
+      "refersTo": "hl-mono",
+      "description": "Monospace link with terminal command style (prefixed with >).",
+      "html": "<a href=\"#\" class=\"ds-link-mono\">Blog</a>",
+      "css": ".ds-link-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #94a3b8 !important; text-decoration: none; padding: 0.4rem 0; transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1); } .ds-link-mono::before { content: '> '; color: #38bdf8; font-weight: 700; } .ds-link-mono:hover { color: #38bdf8 !important; }"
+    },
+    {
+      "name": "Timeline Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Content card for timeline entries. Tonal Navy background with border.",
+      "html": "<div class=\"ds-timeline-card\"><h3>Entry Title</h3><p>Description text.</p></div>",
+      "css": ".ds-timeline-card { background: #131a2a; border: 1px solid #1e293b; border-radius: 8px; padding: 1.5rem; } .ds-timeline-card h3 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.5rem; margin-bottom: 0.5rem; } .ds-timeline-card p { color: #94a3b8; font-size: 0.95rem; }"
+    },
+    {
+      "name": "Skill Tag",
+      "kind": "chip",
+      "refersTo": "skill-tag",
+      "description": "Pill-shaped tag for skills. Accent-tinted background and text.",
+      "html": "<span class=\"ds-skill-tag\">PyTorch</span>",
+      "css": ".ds-skill-tag { background: rgba(56, 189, 248, 0.1); color: #38bdf8; padding: 0.4rem 0.8rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; border: 1px solid rgba(56, 189, 248, 0.2); }"
+    },
+    {
+      "name": "Section Title",
+      "kind": "custom",
+      "refersTo": "section-title",
+      "description": "Section heading with left accent bar (not border).",
+      "html": "<h2 class=\"ds-section-title\">Section Name</h2>",
+      "css": ".ds-section-title { position: relative; display: inline-block; padding-left: 1.5rem; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: clamp(2rem, 3vw + 1rem, 2.5rem); color: #f8fafc; } .ds-section-title::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #38bdf8; border-radius: 2px; }"
+    },
+    {
+      "name": "Fixed Navigation",
+      "kind": "nav",
+      "refersTo": "nav-fixed",
+      "description": "Fixed top navigation with dark scrim and backdrop blur.",
+      "html": "<nav class=\"ds-nav\"><div class=\"ds-nav-logo\">AR.</div><ul class=\"ds-nav-links\"><li><a href=\"#about\">About</a></li></ul></nav>",
+      "css": ".ds-nav { position: fixed; top: 0; width: 100%; padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b; z-index: 1000; } .ds-nav-logo { font-size: 1.5rem; font-weight: 800; color: #f8fafc; } .ds-nav-links { list-style: none; display: flex; gap: 2rem; } .ds-nav-links a { color: #94a3b8; font-size: 0.95rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; transition: color 0.3s ease; } .ds-nav-links a:hover, .ds-nav-links a.active { color: #38bdf8; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Hacker's Notebook",
+    "overview": "This design system is documented, methodical, and technical. It treats the portfolio like a written log, a research notebook, or a pen-tester's report. Every element is deliberate, every interaction has a reason, and the visual language speaks the dialect of someone who works in AI and cybersecurity. The system rejects SaaS landing-page clichés. It rejects the noise of generic developer portfolios. It commits to a dark, precise, terminal-flavored aesthetic that signals deep technical work without theatrics. The system is Layered, Lab-Confident. Surfaces carry subtle depth (box-shadows, tonal borders) to suggest dimension even at rest. The accent color (Electric Ice) is used with surgical precision, never as decoration. Typography pairs a geometric sans (Outfit) for body and display with a technical mono (JetBrains Mono) for labels, dates, and code.",
+    "keyCharacteristics": [
+      "Dark navy background (#0b0f19) with near-black alternates (#131a2a)",
+      "Sky-blue accent (#38bdf8) used for links, active states, and emphasis",
+      "Monospace labels for metadata (dates, tags, keyboard shortcuts)",
+      "Connected vertical highlights list (not card grids)",
+      "Left-aligned hero with code snippet overlay",
+      "Keyboard-first navigation with g + key shortcuts",
+      "Layered depth via subtle shadows and tonal borders"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Electric Ice is the only color that commands attention. It is used on links, active states, and emphasis, never as background fill (except the help overlay scrim). Its rarity is the point.", "section": "colors" },
+      { "name": "The Muted Gray Rule", "body": "Body text is never pure gray. It is always Muted Gray (#94a3b8), which carries 7.47:1 contrast against Deep Navy. The muted tone signals secondary information without sacrificing readability.", "section": "colors" },
+      { "name": "The Pairing Rule", "body": "One sans family for body and display. One mono family for metadata. Never pair two similar sans-serifs. The contrast between geometric sans and technical mono carries the system identity.", "section": "typography" },
+      { "name": "The Display Ceiling Rule", "body": "Hero h1 never exceeds 6rem (96px). It commands the eye at any viewport, but it does not shout. The clamp() range (4rem to 6rem) keeps it readable on mobile without losing presence on desktop.", "section": "typography" },
+      { "name": "The Layered Rule", "body": "Surfaces are layered at rest. Shadow + tonal shift + border combine to create depth without relying on a single dramatic effect.", "section": "elevation" },
+      { "name": "The Glow Rule", "body": "Glows are accent-tinted, not white. They suggest activity, not decoration. Used only on interactive elements (timeline dots, focus rings, hover states).", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the existing CSS tokens (--bg-color, --accent, etc.) for all color and spacing values. No hard-coded hex in component CSS.",
+      "Do pair the geometric sans (Outfit) for body with the technical mono (JetBrains Mono) for metadata. This pairing carries the system identity.",
+      "Do use text-wrap: balance on h1–h3 and text-wrap: pretty on long prose to reduce orphans.",
+      "Do cap hero h1 at 6rem via clamp(4rem, 8vw, 6rem). It commands the eye without shouting.",
+      "Do respect prefers-reduced-motion for all transitions and animations. The scroll-hint, nav toggle, and blog hover effects all have reduced-motion fallbacks.",
+      "Do add aria-hidden=\"true\" to decorative icons (SVG, Font Awesome). The text next to them provides the meaning.",
+      "Do use the keyboard shortcut system (g + key) for power-user navigation. Press ? to show the help overlay."
+    ],
+    "donts": [
+      "Don't use the identical 3-column card grid cliché. The highlights section uses a connected vertical list with a line between icons.",
+      "Don't add the 'System Ready' badge, 'About' / 'Process' / 'Pricing' eyebrows, or any SaaS template scaffolding. The system rejects these by design.",
+      "Don't use border-left or border-right as colored stripes on cards, list items, or callouts. Rewrite with full borders, background tints, or nothing.",
+      "Don't use gradient text (background-clip: text). Use a single solid color. Emphasis via weight or size.",
+      "Don't use glassmorphism as a default. Blurs are functional (navbar scrim, help overlay backdrop), not decorative.",
+      "Don't pair two similar sans-serifs. The system uses one sans family and one mono family. That's it.",
+      "Don't use border-left stripes on the section titles. The accent bar is positioned via ::before on the left, not as a border property.",
+      "Don't use the em-dash as a dramatic reveal. Use commas, periods, or parentheses. The blog content has been audited for AI patterns.",
+      "Don't use the 'navigate' verb in visible prose. It appears in JavaScript function names (navigateTo) but is banned from user-facing copy.",
+      "Don't use Inter, Roboto, or any reflex-pick font. The system uses Outfit and JetBrains Mono, both distinctive choices."
+    ]
+  }
+}
